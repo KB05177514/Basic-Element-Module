@@ -57,7 +57,10 @@
 
 /* Variables -----------------------------------------------------------------*/
 osThreadId LedTaskHandle;
+osThreadId RtcTaskHandle;
+osThreadId TestTaskHandle;
 osTimerId LedTimerHandle;
+osTimerId RtcUpdateTimerHandle;
 
 /* USER CODE BEGIN Variables */
 
@@ -65,7 +68,10 @@ osTimerId LedTimerHandle;
 
 /* Function prototypes -------------------------------------------------------*/
 void StartLedTask(void const * argument);
+void StartRtcTask(void const * argument);
+void StartTestTask(void const * argument);
 void LedTimerCallback(void const * argument);
+void RtcUpdateTimerCallback(void const * argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -95,6 +101,10 @@ void MX_FREERTOS_Init(void) {
   osTimerDef(LedTimer, LedTimerCallback);
   LedTimerHandle = osTimerCreate(osTimer(LedTimer), osTimerPeriodic, NULL);
 
+  /* definition and creation of RtcUpdateTimer */
+  osTimerDef(RtcUpdateTimer, RtcUpdateTimerCallback);
+  RtcUpdateTimerHandle = osTimerCreate(osTimer(RtcUpdateTimer), osTimerPeriodic, NULL);
+
   /* USER CODE BEGIN RTOS_TIMERS */
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
@@ -103,6 +113,14 @@ void MX_FREERTOS_Init(void) {
   /* definition and creation of LedTask */
   osThreadDef(LedTask, StartLedTask, osPriorityNormal, 0, 128);
   LedTaskHandle = osThreadCreate(osThread(LedTask), NULL);
+
+  /* definition and creation of RtcTask */
+  osThreadDef(RtcTask, StartRtcTask, osPriorityNormal, 0, 128);
+  RtcTaskHandle = osThreadCreate(osThread(RtcTask), NULL);
+
+  /* definition and creation of TestTask */
+  osThreadDef(TestTask, StartTestTask, osPriorityIdle, 0, 128);
+  TestTaskHandle = osThreadCreate(osThread(TestTask), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -127,12 +145,49 @@ void StartLedTask(void const * argument)
   /* USER CODE END StartLedTask */
 }
 
+/* StartRtcTask function */
+void StartRtcTask(void const * argument)
+{
+  /* USER CODE BEGIN StartRtcTask */
+    Test_RtcInit();
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(3000);
+    
+    Test_RtcProcess();
+  }
+  /* USER CODE END StartRtcTask */
+}
+
+/* StartTestTask function */
+void StartTestTask(void const * argument)
+{
+  /* USER CODE BEGIN StartTestTask */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1000);
+    
+    NormalCheckTestProcess();
+  }
+  /* USER CODE END StartTestTask */
+}
+
 /* LedTimerCallback function */
 void LedTimerCallback(void const * argument)
 {
   /* USER CODE BEGIN LedTimerCallback */
   Led_LedTimerCallback();
   /* USER CODE END LedTimerCallback */
+}
+
+/* RtcUpdateTimerCallback function */
+void RtcUpdateTimerCallback(void const * argument)
+{
+  /* USER CODE BEGIN RtcUpdateTimerCallback */
+  RTC_UpdateTimerCallback();
+  /* USER CODE END RtcUpdateTimerCallback */
 }
 
 /* USER CODE BEGIN Application */
