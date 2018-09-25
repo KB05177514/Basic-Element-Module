@@ -6,13 +6,12 @@
 *******************************************************************************/
 void SHT20_Open(void);
 void SHT20_Close(void);
-
-static bool SHT20_ReadTemperature(void);
-static bool SHT20_ReadRelativeHumidity(void);
-
-float SHT20_GetTemperature(void);
-float SHT20_GetRelativeHumidity(void);
-
+bool SHT20_WriteTMeasureCmd(void);
+bool SHT20_ReadTData(void);
+bool SHT20_WriteRHMeasureCmd(void);
+bool SHT20_ReadRHData(void);
+float SHT20_GetT(void);
+float SHT20_GetRH(void);
 void SHT20_Handler(void);
 
 #endif

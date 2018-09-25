@@ -1,3 +1,10 @@
+/*******************************************************************************
+* @version	: v1.0
+* @author	: guankaibin
+* @brief	: SHT20驱动程序.    
+*******************************************************************************/
+
+
 #include<stdbool.h>
 #include<stdint.h>
 
@@ -64,11 +71,11 @@ void SHT20_Close(void)
 }
 
 /*******************************************************************************
-* Brief     : 读取温度数值 
+* Brief     : 写温度测量命令 
 * Param     : 
 * Return    :      
 *******************************************************************************/
-static bool SHT20_ReadTemperature(void)
+bool SHT20_WriteTMeasureCmd(void)
 {
     uint8_t tx_cmd = SHT20_TEMPERATURE_MEASURE_CMD;  
        
@@ -78,11 +85,21 @@ static bool SHT20_ReadTemperature(void)
     {
         return false;
     }
-    
-    vTaskDelay(SHT20_TEMPERATURE_MEASURE_TIME_MS);
-    
+    else
+    {
+    	return true;
+    }
+}
+
+/*******************************************************************************
+* Brief     : 读取温度数值 
+* Param     : 
+* Return    :      
+*******************************************************************************/
+bool SHT20_ReadTData(void)
+{   
     uint8_t rx_data[3] = {0};
-    HAL_Status = 
+    HAL_StatusTypeDef HAL_Status = 
     HAL_I2C_Master_Receive(&hi2c1, SHT20_SLAVE_ADDR, rx_data, sizeof(rx_data), 5);
     if(HAL_Status != HAL_OK)
     {
@@ -98,11 +115,11 @@ static bool SHT20_ReadTemperature(void)
 }
 
 /*******************************************************************************
-* Brief     : 读取湿度数值
+* Brief     : 写湿度测量命令
 * Param     : 
 * Return    :      
 *******************************************************************************/
-static bool SHT20_ReadRelativeHumidity(void)
+bool SHT20_WriteRHMeasureCmd(void)
 {
     uint8_t tx_cmd = SHT20_RELATIVE_HUMIDITY_MEASURE_CMD;
     HAL_StatusTypeDef HAL_Status = 
@@ -111,11 +128,21 @@ static bool SHT20_ReadRelativeHumidity(void)
     {
         return false;
     }
-    
-    vTaskDelay(SHT20_RELATIVE_HUMIDITY_MEASURE_TIME_MS);
-    
+    else
+    {
+    	return true;
+    }
+}
+
+/*******************************************************************************
+* Brief     : 读取湿度数值
+* Param     : 
+* Return    :      
+*******************************************************************************/
+bool SHT20_ReadRHData(void)
+{    
     uint8_t rx_data[3] = {0};
-    HAL_Status = 
+    HAL_StatusTypeDef HAL_Status = 
     HAL_I2C_Master_Receive(&hi2c1, SHT20_SLAVE_ADDR, rx_data, sizeof(rx_data), 5);    
     if(HAL_Status != HAL_OK)
     {
@@ -135,7 +162,7 @@ static bool SHT20_ReadRelativeHumidity(void)
 * Param     : 
 * Return    :      
 *******************************************************************************/
-float SHT20_GetTemperature(void)
+float SHT20_GetT(void)
 {
     return SHT20.temperature;
 }
@@ -145,7 +172,7 @@ float SHT20_GetTemperature(void)
 * Param     : 
 * Return    :      
 *******************************************************************************/
-float SHT20_GetRelativeHumidity(void)
+float SHT20_GetRH(void)
 {
     return SHT20.relative_humidity;
 }
@@ -157,9 +184,17 @@ float SHT20_GetRelativeHumidity(void)
 *******************************************************************************/
 void SHT20_Handler(void)
 {
-    SHT20_ReadTemperature();
-    
-    SHT20_ReadRelativeHumidity();
+    SHT20_WriteTMeasureCmd();
+
+  	vTaskDelay(SHT20_TEMPERATURE_MEASURE_TIME_MS);
+
+  	SHT20_ReadTData();
+
+  	SHT20_WriteRHMeasureCmd();
+
+  	vTaskDelay(SHT20_RELATIVE_HUMIDITY_MEASURE_TIME_MS);
+
+  	SHT20_ReadRHData();
   
     vTaskDelay(885);
 }
