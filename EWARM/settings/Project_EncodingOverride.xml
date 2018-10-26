@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+
+<userOverrides>
+  <override>
+    <path>F:\kb\Basic-Element-Module\Src\system.c</path>
+    <encoding>System</encoding>
+  </override>
+  <override>
+    <path>F:\kb\Basic-Element-Module\stm32l051_reg_log\print_reg.c</path>
+    <encoding>System</encoding>
+  </override>
+</userOverrides>
+
+

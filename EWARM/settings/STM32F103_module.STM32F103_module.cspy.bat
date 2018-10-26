@@ -25,7 +25,7 @@ if not "%~1" == "" goto debugFile
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\common\bin\cspybat" -f "F:\kb\Basic-Element-Module\EWARM\settings\module.module.general.xcl" --backend -f "F:\kb\Basic-Element-Module\EWARM\settings\module.module.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\common\bin\cspybat" -f "F:\kb\STM32F103_module\EWARM\settings\STM32F103_module.STM32F103_module.general.xcl" --backend -f "F:\kb\STM32F103_module\EWARM\settings\STM32F103_module.STM32F103_module.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\common\bin\cspybat" -f "F:\kb\Basic-Element-Module\EWARM\settings\module.module.general.xcl" "--debug_file=%~1" --backend -f "F:\kb\Basic-Element-Module\EWARM\settings\module.module.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 7.5\common\bin\cspybat" -f "F:\kb\STM32F103_module\EWARM\settings\STM32F103_module.STM32F103_module.general.xcl" "--debug_file=%~1" --backend -f "F:\kb\STM32F103_module\EWARM\settings\STM32F103_module.STM32F103_module.driver.xcl" 
 
 @echo off 
 :end
